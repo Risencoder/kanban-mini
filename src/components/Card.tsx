@@ -17,11 +17,7 @@ export default function Card({ task, onDelete }: Props) {
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={isDragging ? "card cardDrag" : "card"}
-    >
+    <div ref={setNodeRef} style={style} className={isDragging ? "card cardDrag" : "card"}>
       <div className="cardRow">
         {/* Drag handle */}
         <div className="handle" {...listeners} {...attributes} title="Drag">

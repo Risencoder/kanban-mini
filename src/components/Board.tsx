@@ -13,18 +13,18 @@ export type ColumnId = "todo" | "doing" | "done";
 type ColumnsType = Record<ColumnId, Task[]>;
 
 const COLUMN_TITLES: Record<ColumnId, string> = {
-  todo: "ЗАВДАННЯ",
-  doing: "РОБИТИ",
-  done: "ГОТОВО",
+  todo: "TO DO",
+  doing: "IN PROGRESS",
+  done: "DONE",
 };
 
 const initialData: ColumnsType = {
   todo: [
-    { id: "1", title: "Вивчіть React" },
-    { id: "2", title: "Створіть Канбан" },
+    { id: "1", title: "Learn React basics" },
+    { id: "2", title: "Build Kanban UI" },
   ],
-  doing: [{ id: "3", title: "Практикуйте англійську" }],
-  done: [{ id: "4", title: "Встановити вузол" }],
+  doing: [{ id: "3", title: "Practice English" }],
+  done: [{ id: "4", title: "Setup Node & Vite" }],
 };
 
 function uid() {
@@ -77,7 +77,6 @@ export default function Board() {
       const sourceCol = findColumnByTaskId(activeId, prev);
       if (!sourceCol) return prev;
 
-      // якщо кинули на колонку — беремо columnId з over.data
       const overData = over.data.current as unknown as
         | { type?: string; columnId?: string }
         | undefined;
@@ -103,7 +102,7 @@ export default function Board() {
 
   return (
     <div className="app">
-      <h1 className="h1">Дошка Канбан</h1>
+      <h1 className="h1">Kanban Board</h1>
 
       <div className="toolbar">
         <input
@@ -113,11 +112,11 @@ export default function Board() {
           onKeyDown={(e) => {
             if (e.key === "Enter") addTask();
           }}
-          placeholder="Нове завдання..."
+          placeholder="New task..."
         />
 
         <button className="btn" onClick={addTask}>
-          Додати
+          Add
         </button>
       </div>
 

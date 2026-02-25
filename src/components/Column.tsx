@@ -16,19 +16,17 @@ export default function Column({ id, title, tasks, onDelete }: Props) {
   });
 
   return (
-    <div ref={setNodeRef} className={isOver ? "col colOver" : "col"}>
+    <div ref={setNodeRef} className={`col ${id} ${isOver ? "colOver" : ""}`}>
       <div className="colHead">
         <div className="colTitle">{title}</div>
         <div className="badge">{tasks.length}</div>
       </div>
 
-      <div style={{ display: "grid", gap: 10 }}>
+      <div className="colBody">
         {tasks.length === 0 ? (
-          <div className="empty">Перетягни сюди задачу</div>
+          <div className="empty">Drop a task here</div>
         ) : (
-          tasks.map((task) => (
-            <Card key={task.id} task={task} onDelete={onDelete} />
-          ))
+          tasks.map((task) => <Card key={task.id} task={task} onDelete={onDelete} />)
         )}
       </div>
     </div>
