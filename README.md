@@ -1,78 +1,57 @@
-# React + TypeScript + Vite
+# Kanban Board App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern Kanban board with drag & drop built using React, TypeScript and dnd-kit.
 
-Currently, two official plugins are available:
+[![Live Demo](https://img.shields.io/badge/demo-live-green)](https://kanban-mini-lemon.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Live Demo
 
-## React Compiler
+👉 https://kanban-mini-lemon.vercel.app
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📷 Preview
 
-## Expanding the ESLint configuration
+[![Kanban Board Preview](./preview.png)](https://kanban-mini-lemon.vercel.app)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-# Kanban Board (React + TypeScript + dnd-kit)
+## ✨ Features
 
-Live Demo: https://kanban-board-risencoder.vercel.app
+- Drag & Drop tasks between columns
+- Add and delete tasks
+- LocalStorage persistence
+- Responsive layout
+- Modern glassmorphism UI
+- Smooth animations
 
-Mini kanban board with drag & drop, create/delete tasks, and persistence via localStorage.
+## 🛠 Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- React
+- TypeScript
+- Vite
+- dnd-kit
+- CSS
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 📦 Installation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Clone the repository:
+```bash
+git clone https://github.com/Risencoder/kanban-mini.git
 ```
+Install dependencies:```
+npm install```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Run development server:```
+npm run dev```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🎯 Project Purpose
+
+This project was created as a portfolio example to demonstrate:
+Frontend architecture with React + TypeScript
+Drag & Drop interactions
+State management
+UI/UX implementation
+Deployment with Vercel
+
+## 👨‍💻 Author
+
+Anton Kuzenko
+GitHub: https://github.com/Risencoder
