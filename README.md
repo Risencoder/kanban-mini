@@ -14,6 +14,11 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Kanban Board (React + TypeScript + dnd-kit)
+
+Live Demo: https://kanban-board-risencoder.vercel.app
+
+Mini kanban board with drag & drop, create/delete tasks, and persistence via localStorage.
 
 ```js
 export default defineConfig([
