@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { DndContext } from "@dnd-kit/core";
 import type { DragEndEvent } from "@dnd-kit/core";
 import Column from "./Column";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 export type Task = {
   id: string;
@@ -10,7 +10,6 @@ export type Task = {
 };
 
 export type ColumnId = "todo" | "doing" | "done";
-
 type ColumnsType = Record<ColumnId, Task[]>;
 
 const COLUMN_TITLES: Record<ColumnId, string> = {
@@ -28,6 +27,10 @@ const initialData: ColumnsType = {
   done: [{ id: "4", title: "Встановити вузол" }],
 };
 
+function uid() {
+  return crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
 export default function Board() {
   const [columns, setColumns] = useLocalStorage<ColumnsType>("kanban.columns.v1", initialData);
   const [newTaskTitle, setNewTaskTitle] = useState("");
@@ -38,10 +41,7 @@ export default function Board() {
     const title = newTaskTitle.trim();
     if (!title) return;
 
-    const task: Task = {
-      id: crypto.randomUUID?.() ?? Date.now().toString(),
-      title,
-    };
+    const task: Task = { id: uid(), title };
 
     setColumns((prev) => ({
       ...prev,
@@ -59,9 +59,9 @@ export default function Board() {
     }));
   }
 
-  function findColumnByTaskId(taskId: string): ColumnId | null {
+  function findColumnByTaskId(taskId: string, state: ColumnsType): ColumnId | null {
     for (const col of columnOrder) {
-      if (columns[col].some((t) => t.id === taskId)) return col;
+      if (state[col].some((t) => t.id === taskId)) return col;
     }
     return null;
   }
@@ -73,73 +73,56 @@ export default function Board() {
     const activeId = String(active.id);
     const overId = String(over.id);
 
-    const sourceCol = findColumnByTaskId(activeId);
-    if (!sourceCol) return;
+    setColumns((prev) => {
+      const sourceCol = findColumnByTaskId(activeId, prev);
+      if (!sourceCol) return prev;
 
-    // Визначаємо ціль:
-    // - якщо кинули на колонку, беремо columnId з data
-    // - якщо кинули на картку, шукаємо колонку по id картки
-    const overData = over.data.current as unknown as
-      | { type?: string; columnId?: string }
-      | undefined;
+      // якщо кинули на колонку — беремо columnId з over.data
+      const overData = over.data.current as unknown as
+        | { type?: string; columnId?: string }
+        | undefined;
 
-    const targetCol =
-      overData?.type === "column"
-        ? (overData.columnId as ColumnId)
-        : (findColumnByTaskId(overId) as ColumnId | null);
+      const targetCol =
+        overData?.type === "column"
+          ? (String(overData.columnId) as ColumnId)
+          : findColumnByTaskId(overId, prev);
 
-    if (!targetCol) return;
-    if (sourceCol === targetCol) return;
+      if (!targetCol) return prev;
+      if (sourceCol === targetCol) return prev;
 
-    const movedTask = columns[sourceCol].find((t) => t.id === activeId);
-    if (!movedTask) return;
+      const movedTask = prev[sourceCol].find((t) => t.id === activeId);
+      if (!movedTask) return prev;
 
-    setColumns((prev) => ({
-      ...prev,
-      [sourceCol]: prev[sourceCol].filter((t) => t.id !== activeId),
-      [targetCol]: [...prev[targetCol], movedTask],
-    }));
+      return {
+        ...prev,
+        [sourceCol]: prev[sourceCol].filter((t) => t.id !== activeId),
+        [targetCol]: [...prev[targetCol], movedTask],
+      };
+    });
   }
 
   return (
-    <div style={{ padding: 24, color: "#fff" }}>
-      <h1 style={{ fontSize: 48, margin: "0 0 24px 0" }}>Дошка Канбан</h1>
+    <div className="app">
+      <h1 className="h1">Дошка Канбан</h1>
 
-      {/* Add task */}
-      <div style={{ display: "flex", gap: 12, marginBottom: 18 }}>
+      <div className="toolbar">
         <input
+          className="input"
           value={newTaskTitle}
           onChange={(e) => setNewTaskTitle(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") addTask();
           }}
           placeholder="Нове завдання..."
-          style={{
-            flex: 1,
-            maxWidth: 420,
-            padding: "10px 12px",
-            borderRadius: 10,
-            border: "1px solid rgba(255,255,255,0.15)",
-            outline: "none",
-          }}
         />
 
-        <button
-          onClick={addTask}
-          style={{
-            padding: "10px 16px",
-            borderRadius: 10,
-            border: "1px solid rgba(255,255,255,0.15)",
-            cursor: "pointer",
-            fontWeight: 600,
-          }}
-        >
+        <button className="btn" onClick={addTask}>
           Додати
         </button>
       </div>
 
       <DndContext onDragEnd={handleDragEnd}>
-        <div style={{ display: "flex", gap: 18 }}>
+        <div className="board">
           {columnOrder.map((colId) => (
             <Column
               key={colId}
